@@ -4,10 +4,23 @@ Contains the class TestConsoleDocs
 """
 
 import console
+from contextlib import contextmanager
+from datetime import datetime
 import inspect
+from io import StringIO
+import models
 import pep8
-import unittest
+import sys
+from os import environ, stat
 HBNBCommand = console.HBNBCommand
+
+Place = models.Place
+State = models.State
+User = models.User
+STORAGE_TYPE = environ.get('HBNB_TYPE_STORAGE')
+HBNBCommand = console.HBNBCommand
+storage = console.storage
+CNC = models.CNC
 
 
 class TestConsoleDocs(unittest.TestCase):

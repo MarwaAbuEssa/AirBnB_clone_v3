@@ -11,14 +11,35 @@ from models.base_model import BaseModel
 import pep8
 import unittest
 User = user.User
+STORAGE_TYPE = environ.get('HBNB_TYPE_STORAGE')
 
 
 class TestUserDocs(unittest.TestCase):
     """Tests to check the documentation and style of User class"""
+
+     all_funcs = inspect.getmembers(User, inspect.isfunction)
+
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
         cls.user_f = inspect.getmembers(User, inspect.isfunction)
+
+    def test_doc_file(self):
+        """... documentation for the file"""
+        expected = '\nUser Class from Models Module\n'
+        actual = models.user.__doc__
+        self.assertEqual(expected, actual)
+
+    def test_doc_class(self):
+        """... documentation for the class"""
+        actual = User.__doc__
+        self.assertIsNotNone(actual)
+
+    def test_all_function_docs(self):
+        """... tests for ALL DOCS for all functions in db_storage file"""
+        all_functions = TestUserDocs.all_funcs
+        for function in all_functions:
+            self.assertIsNotNone(function[1].__doc__)
 
     def test_pep8_conformance_user(self):
         """Test that models/user.py conforms to PEP8."""
@@ -27,6 +48,13 @@ class TestUserDocs(unittest.TestCase):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
+    def test_file_is_executable(self):
+        """... tests if file has correct permissions so user can execute"""
+        file_stat = stat('models/user.py')
+        permissions = str(oct(file_stat[0]))
+        actual = int(permissions[5:-2]) >= 5
+        self.assertTrue(actual)
+        
     def test_pep8_conformance_test_user(self):
         """Test that tests/test_models/test_user.py conforms to PEP8."""
         pep8s = pep8.StyleGuide(quiet=True)
